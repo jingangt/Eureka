@@ -46,7 +46,12 @@ class HomeViewController : FormViewController {
         
                 <<< ButtonRow("Rows") {
                         $0.title = $0.tag
-                        $0.presentationMode = .SegueName(segueName: "RowsExampleViewControllerSegue", completionCallback: nil)
+//                        $0.presentationMode = .SegueName(segueName: "RowsExampleViewControllerSegue", completionCallback: nil)
+                        $0.presentationMode = PresentationMode.Show(controllerProvider: ControllerProvider.Callback(builder: { () -> RowsExampleViewController in
+                            return RowsExampleViewController()
+                        }), completionCallback: { (viewController) in
+                            print("showed")
+                        })
                     }
             
                 <<< ButtonRow("Native iOS Event Form") { row in
@@ -269,11 +274,25 @@ class RowsExampleViewController: FormViewController {
                 <<< DecimalRow() {
                         $0.title = "DecimalRow"
                         $0.value = 5
-                        $0.formatter = DecimalFormatter()
-                        $0.useFormatterDuringInput = true
-                        //$0.useFormatterOnDidBeginEditing = true
+//                        let myFormatter = DecimalFormatter()
+//                        myFormatter.minimumFractionDigits = 0
+//                        if let myFormatter = $0.formatter as? NSNumberFormatter {
+//                            myFormatter.minimumFractionDigits = 0
+//                            myFormatter.minimumSignificantDigits = 0
+//                            $0.formatter = myFormatter
+//                        }
+                        $0.formatter = IdaDecimalFormatter()
+                    
+                    
+                        $0.useFormatterDuringInput = false
+                        $0.useFormatterOnDidBeginEditing = true
+                    
+                        $0.onChange({ (row) in
+                            print("DecimalRow.onChange")
+                        })
+                    
                     }.cellSetup { cell, _  in
-                        cell.textField.keyboardType = .NumberPad
+//                        cell.textField.keyboardType = .NumberPad
                     }
                 
                 <<< URLRow() {
